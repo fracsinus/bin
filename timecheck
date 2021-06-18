@@ -1,0 +1,6 @@
+#!/bin/bash
+
+# Dispay datetime
+## requires dzen2
+
+echo -e $(date "+%d %b")" ("$(date "+%a")")""\n"$(date "+%H:%M:%S") | dzen2 -p 2 -x "-200" -y "30" -w "150" -l "1" -sa 'c' -ta 'c'  -e 'onstart=uncollapse'

@@ -1,0 +1,5 @@
+#!/bin/bash
+
+# get STDIN, remove newlines and save it in X clipboard
+
+tr -d '\n' | /usr/bin/xclip -i -selection clipboard

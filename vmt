@@ -1,0 +1,12 @@
+#!/bin/bash
+
+# Toggle mute in PulseAudio
+
+pactl set-sink-mute 0 toggle
+status=$(pactl list | grep Mute: | head -n 1 | grep -o "yes\|no") 
+echo $status
+if [ "$status" == yes ]; then
+	echo muted | dzen2 -x -110 -y 20 -w 70 -h 50 -p 1
+else
+	pactl list | grep -o [0-9]*% | head -n 1 | dzen2 -x -100 -y 20 -w 50 -h 50 -p 1
+fi

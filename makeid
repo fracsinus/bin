@@ -1,0 +1,42 @@
+#!/usr/bin/python3
+
+import datetime
+import os.path
+import random
+import string
+import subprocess
+import sys
+
+HOME = os.path.expanduser('~')
+DEFAULT_LENGTH = 20
+
+
+def makeid(len):
+    if '-h' in sys.argv:
+        return ''.join(
+            random.choice('abcdef' + string.digits) for i in range(len)
+        )
+    return ''.join(random.choice(
+        string.ascii_lowercase + string.digits) for i in range(len))
+
+
+if __name__ == "__main__":
+
+    length = DEFAULT_LENGTH
+    for i in sys.argv:
+        try:
+            if type(int(i)) == int:
+                length = int(i)
+        except Exception:
+            pass
+
+    this_id = makeid(length)
+    print(this_id)
+    proc = subprocess.Popen(
+        ["xclip", "-i", "-selection", "clipboard"], stdin=subprocess.PIPE
+    )
+    proc.communicate(this_id.encode("ascii"))
+
+    with open(HOME + '/.makeid_history', 'a') as f:
+        f.write('[{}] ({}) {}\n'.format(
+            datetime.datetime.now().isoformat(), sys.argv[1], this_id))
