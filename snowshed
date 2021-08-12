@@ -1,0 +1,33 @@
+#!/bin/bash
+
+SHELL=/bin/bash
+TARGET=$1
+DIR=$(dirname $BASH_SOURCE)
+
+# Colors
+COLOR_GREEN='\x1b[1;38;5;2m'
+COLOR_MYPY='\x1b[1;38;5;207m'
+COLOR_FLAKE='\x1b[1;38;5;33m'
+COLOR_NONE='\x1b[0m'
+
+TAB='    '
+
+# Pretty print functions
+HEADER="
+pretty_mypy() {
+  echo -e '$COLOR_MYPY$TAB''[mypy]''$COLOR_NONE'
+  sed 's/^/$TAB$TAB/' <(echo \"\$RES\");
+  return \$PIPESTATUS;
+};
+pretty_flake() {
+  if [ ! \"\$RES\" ]; then
+    RES='$COLOR_GREEN''Success''$COLOR_NONE';
+  fi;
+  echo -e '$COLOR_FLAKE$TAB''[flake]''$COLOR_NONE'
+  sed 's/^/$TAB$TAB/' <(echo -e \"\$RES\")
+  return \$PIPESTATUS;
+}
+echo \"[\$(date '+%Y-%m-%d %H:%M:%S')]\";
+"
+
+echo $TARGET | entr $SHELL -c "$HEADER RES=\$(unbuffer flake8 $TARGET) pretty_flake; RES=\$(unbuffer mypy $TARGET) pretty_mypy;"
