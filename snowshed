@@ -20,7 +20,7 @@ pretty_mypy() {
   return \$PIPESTATUS;
 };
 pretty_flake() {
-  if [ ! \"\$RES\" ]; then
+  if [ \$? -eq 0 ]; then
     RES='$COLOR_GREEN''Success''$COLOR_NONE';
   fi;
   echo -e '$COLOR_FLAKE$TAB''[flake]''$COLOR_NONE'
